@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poem Finder</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #fafafa;
+      margin: 0;
+      padding: 0;
+      color: #222;
+      /* Add transition for body theme changes */
+      transition: background-color 0.5s ease;
+    }
+    header {
+      background: #304ffe;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 24px;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      /* Smooth transition for background changes */
+      transition: background 0.5s ease;
+    }
+    main {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    .search-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .search-box input {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .search-box button {
+      background: #304ffe;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      /* Use 'background' property for gradient transition */
+      transition: background 0.3s;
+      white-space: nowrap;
+    }
+    .search-box button:hover {
+      background: #1a237e;
+    }
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    select {
+      padding: 10px;
+      border-radius: 6px;
+      border: 2px solid #ccc;
+      font-size: 15px;
+      flex: 1;
+      min-width: 140px;
+      box-sizing: border-box;
+    }
+    #results p {
+      margin-top: 0;
+    }
+    .card {
+      background: white;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      margin: 0 0 4px;
+      color: #304ffe;
+    }
+    .card small {
+      color: #777;
+    }
+    .card p {
+      margin-top: 10px;
+      line-height: 1.5em;
+    }
+
+    /* --- Style for the Loading Message --- */
+    .loading-msg {
+      text-align: center;
+      color: #777;
+      font-style: italic;
+      padding: 20px 0;
+    }
+
+
+    /* --- Dynamic Theme Styles --- */
+    
+    /* ANGER */
+    body.theme-anger header {
+      background: linear-gradient(to right, #d32f2f, #b71c1c);
+    }
+    body.theme-anger .search-box button { background: #d32f2f; }
+    body.theme-anger .search-box button:hover { background: #b71c1c; }
+    body.theme-anger .card h3 { color: #d32f2f; }
+
+    /* JOY */
+    body.theme-joy header {
+      background: linear-gradient(to right, #fbc02d, #f57f17);
+    }
+    body.theme-joy .search-box button { background: #fbc02d; }
+    body.theme-joy .search-box button:hover { background: #f57f17; }
+    body.theme-joy .card h3 { color: #f57f17; }
+
+    /* SADNESS */
+    body.theme-sadness header {
+      background: linear-gradient(to right, #78909c, #455a64);
+    }
+    body.theme-sadness .search-box button { background: #78909c; }
+    body.theme-sadness .search-box button:hover { background: #455a64; }
+    body.theme-sadness .card h3 { color: #455a64; }
+
+    /* FEAR */
+    body.theme-fear header {
+      background: linear-gradient(to right, #4a148c, #311b92);
+    }
+    body.theme-fear .search-box button { background: #4a148c; }
+    body.theme-fear .search-box button:hover { background: #311b92; }
+    body.theme-fear .card h3 { color: #4a148c; }
+
+    /* SURPRISE */
+    body.theme-surprise header {
+      background: linear-gradient(to right, #00bfa5, #00897b);
+    }
+    body.theme-surprise .search-box button { background: #00bfa5; }
+    body.theme-surprise .search-box button:hover { background: #00897b; }
+    body.theme-surprise .card h3 { color: #00897b; }
+
+  </style>
+</head>
+
+<body>
+  <header>Poem Finder</header>
+
+  <main>
+    <div class="search-box">
+      <input id="query" placeholder="Search poems, lines, or poet name...">
+      <button onclick="doSearch()">Search</button>
+    </div>
+
+    <div class="filters">
+      <select id="emotion">
+        <option value="">Emotion</option>
+        <option value="sadness">Sadness</option>
+        <option value="surprise">Surprise</option>
+        <option value="fear">Fear</option>
+        <option value="joy">Joy</option>
+        <option value="anger">Anger</option>
+      </select>
+
+      <select id="sortTitle">
+        <option value="">Sort by title</option>
+        <option value="az">A - Z (Ascending)</option>
+        <option value="za">Z - A (Descending)</option>
+      </select>
+
+      <select id="sortPoet">
+        <option value="">Sort by poet</option>
+        <option value="az">A - Z (Ascending)</option>
+        <option value="za">Z - A (Descending)</section>
+      </select>
+    </div>
+
+    <div id="results"></div>
+  </main>
+
+  <script>
+    // --- Theme Changer ---
+    // Listen for changes on the emotion dropdown
+    document.getElementById("emotion").addEventListener("change", updateTheme);
+
+    function updateTheme() {
+      // Get the selected emotion value (e.g., "sadness", "joy")
+      const emotion = document.getElementById("emotion").value;
+      const body = document.body;
+
+      // First, remove all possible theme classes
+      body.classList.remove(
+        "theme-sadness",
+        "theme-surprise",
+        "theme-fear",
+        "theme-joy",
+        "theme-anger"
+      );
+
+      // If an emotion is selected (not the default "Emotion"), 
+      // add the new theme class to the <body>
+      if (emotion) {
+        body.classList.add("theme-" + emotion);
+      }
+    }
+    // --- End of Theme Changer ---
+
+
+    // Demo data for layout testing 
+    const FAKE_RESULTS = [
+      {
+        title: "The Raven",
+        poet: "Edgar Allan Poe",
+        emotion: "Sadness",
+        snippet: "Once upon a midnight dreary, while I pondered, weak and weary..."
+      },
+      {
+        title: "Annabel Lee",
+        poet: "Edgar AllanG Poe",
+        emotion: "Sadness",
+        snippet: "It was many and many a year ago, in a kingdom by the sea..."
+      },
+      {
+        title: "Hope is the Thing with Feathers",
+        poet: "Emily Dickinson",
+        emotion: "Sadness",
+        snippet: "Hope is the thing with feathers that perches in the soul..."
+      },
+      {
+        title: "Sonnet 18",
+        poet: "William Shakespeare",
+        emotion: "Joy",
+        snippet: "Shall I compare thee to a summer's day?"
+      }
+    ];
+
+    function doSearch() {
+      const q = document.getElementById("query").value.toLowerCase().trim();
+      
+      /* Get emotion value (it's lowercase now) */
+      const emotion = document.getElementById("emotion").value; 
+      
+      const sortTitle = document.getElementById("sortTitle").value;
+      const sortPoet = document.getElementById("sortPoet").value;
+      const resultsDiv = document.getElementById("results");
+
+      // --- Show loading message immediately ---
+      resultsDiv.innerHTML = "<p class='loading-msg'>Loading poems...</p>";
+
+      // --- Simulate a 0.5 second delay ---
+      setTimeout(() => {
+        // --- All of the original logic goes inside this timeout ---
+        let matches = FAKE_RESULTS.filter(p =>
+          // Compare lowercase emotion from data with lowercase value
+          (!emotion || p.emotion.toLowerCase() === emotion) &&
+          (
+            !q ||
+            p.title.toLowerCase().includes(q) ||
+            p.poet.toLowerCase().includes(q) ||
+            p.snippet.toLowerCase().includes(q)
+          )
+        );
+
+        // Sorting logic
+        if (sortTitle) {
+          matches.sort((a, b) =>
+            sortTitle === "az"
+              ? a.title.localeCompare(b.title)
+              : b.title.localeCompare(a.title)
+          );
+        } else if (sortPoet) {
+          matches.sort((a, b) =>
+            sortPoet === "az"
+              ? a.poet.localeCompare(b.poet)
+              : b.poet.localeCompare(a.title)
+          );
+        }
+
+        // Display messages / results
+        if (!q && !emotion) {
+          resultsDiv.innerHTML = "<p>Type a keyword or select an emotion to start searching.</p>";
+          return;
+        }
+
+        if (matches.length === 0) {
+          resultsDiv.innerHTML = "<p>No matching poems (demo data).</p>";
+          return;
+        }
+
+        resultsDiv.innerHTML = matches.map(p => `
+          <div class="card">
+            <h3>${p.title}</h3>
+            <small>${p.poet} — Emotion: ${p.emotion}</small>
+            <p>${p.snippet}</p>
+          </div>
+        `).join("");
+        // --- End of original logic ---
+
+      }, 500); // 500ms = 0.5 second delay
+    }
+
+    // Call updateTheme() on page load
+    updateTheme();
+
+  </script>
+</body>
+</html>
