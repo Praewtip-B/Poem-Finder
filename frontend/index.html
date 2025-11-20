@@ -5,13 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Poem Finder</title>
   <style>
+    /* ----------------------------------------------------------------------- */
+    /* --- CSS STYLES (NO CHANGES HERE) --- */
+    /* ----------------------------------------------------------------------- */
     body {
       font-family: "Segoe UI", Arial, sans-serif;
       background: #fafafa;
       margin: 0;
       padding: 0;
       color: #222;
-      /* Add transition for body theme changes */
       transition: background-color 0.5s ease;
     }
     header {
@@ -22,7 +24,6 @@
       font-size: 24px;
       letter-spacing: 1px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      /* Smooth transition for background changes */
       transition: background 0.5s ease;
     }
     main {
@@ -52,7 +53,6 @@
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
-      /* Use 'background' property for gradient transition */
       transition: background 0.3s;
       white-space: nowrap;
     }
@@ -153,162 +153,183 @@
 <body>
   <header>Poem Finder</header>
 
-  <main>
-    <div class="search-box">
-      <input id="query" placeholder="Search poems, lines, or poet name...">
-      <button onclick="doSearch()">Search</button>
-    </div>
-
-    <div class="filters">
-      <select id="emotion">
-        <option value="">Emotion</option>
-        <option value="sadness">Sadness</option>
-        <option value="surprise">Surprise</option>
-        <option value="fear">Fear</option>
-        <option value="joy">Joy</option>
-        <option value="anger">Anger</option>
-      </select>
-
-      <select id="sortTitle">
-        <option value="">Sort by title</option>
-        <option value="az">A - Z (Ascending)</option>
-        <option value="za">Z - A (Descending)</option>
-      </select>
-
-      <select id="sortPoet">
-        <option value="">Sort by poet</option>
-        <option value="az">A - Z (Ascending)</option>
-        <option value="za">Z - A (Descending)</section>
-      </select>
-    </div>
-
-    <div id="results"></div>
-  </main>
+  <main></main>
 
   <script>
+    // --- API Configuration ---
+    const API_ENDPOINT = "http://localhost:5000/api/search";
+    
     // --- Theme Changer ---
-    // Listen for changes on the emotion dropdown
-    document.getElementById("emotion").addEventListener("change", updateTheme);
-
     function updateTheme() {
-      // Get the selected emotion value (e.g., "sadness", "joy")
-      const emotion = document.getElementById("emotion").value;
-      const body = document.body;
+        // Get the select element that was just re-rendered inside loadView()
+        const emotionSelect = document.getElementById("emotion");
+        if (!emotionSelect) return; 
+        
+        const emotion = emotionSelect.value;
+        const body = document.body;
 
-      // First, remove all possible theme classes
-      body.classList.remove(
-        "theme-sadness",
-        "theme-surprise",
-        "theme-fear",
-        "theme-joy",
-        "theme-anger"
-      );
+        // Attach event listener to the newly created element
+        emotionSelect.onchange = updateTheme;
 
-      // If an emotion is selected (not the default "Emotion"), 
-      // add the new theme class to the <body>
-      if (emotion) {
-        body.classList.add("theme-" + emotion);
-      }
+        body.classList.remove("theme-sadness", "theme-surprise", "theme-fear", "theme-joy", "theme-anger");
+        if (emotion) {
+            body.classList.add("theme-" + emotion);
+        }
     }
-    // --- End of Theme Changer ---
+    
+    function updateThemeFromGenre(genre) {
+        const body = document.body;
+        body.className = '';
+        const lowerCaseGenre = genre ? genre.toLowerCase() : '';
+        const themeClass = `theme-${lowerCaseGenre}`;
+        
+        if (['theme-sadness', 'theme-surprise', 'theme-fear', 'theme-joy', 'theme-anger'].includes(themeClass)) {
+            body.classList.add(themeClass);
+        }
+    }
 
+    // --- SEARCH AND VIEW LOGIC ---
+    async function doSearch() {
+        const query_text = document.getElementById("query").value.trim();
+        const emotion = document.getElementById("emotion").value; 
+        const resultsDiv = document.getElementById("results");
 
-    // Demo data for layout testing 
-    const FAKE_RESULTS = [
-      {
-        title: "The Raven",
-        poet: "Edgar Allan Poe",
-        emotion: "Sadness",
-        snippet: "Once upon a midnight dreary, while I pondered, weak and weary..."
-      },
-      {
-        title: "Annabel Lee",
-        poet: "Edgar AllanG Poe",
-        emotion: "Sadness",
-        snippet: "It was many and many a year ago, in a kingdom by the sea..."
-      },
-      {
-        title: "Hope is the Thing with Feathers",
-        poet: "Emily Dickinson",
-        emotion: "Sadness",
-        snippet: "Hope is the thing with feathers that perches in the soul..."
-      },
-      {
-        title: "Sonnet 18",
-        poet: "William Shakespeare",
-        emotion: "Joy",
-        snippet: "Shall I compare thee to a summer's day?"
-      }
-    ];
-
-    function doSearch() {
-      const q = document.getElementById("query").value.toLowerCase().trim();
-      
-      /* Get emotion value (it's lowercase now) */
-      const emotion = document.getElementById("emotion").value; 
-      
-      const sortTitle = document.getElementById("sortTitle").value;
-      const sortPoet = document.getElementById("sortPoet").value;
-      const resultsDiv = document.getElementById("results");
-
-      // --- Show loading message immediately ---
-      resultsDiv.innerHTML = "<p class='loading-msg'>Loading poems...</p>";
-
-      // --- Simulate a 0.5 second delay ---
-      setTimeout(() => {
-        // --- All of the original logic goes inside this timeout ---
-        let matches = FAKE_RESULTS.filter(p =>
-          // Compare lowercase emotion from data with lowercase value
-          (!emotion || p.emotion.toLowerCase() === emotion) &&
-          (
-            !q ||
-            p.title.toLowerCase().includes(q) ||
-            p.poet.toLowerCase().includes(q) ||
-            p.snippet.toLowerCase().includes(q)
-          )
-        );
-
-        // Sorting logic
-        if (sortTitle) {
-          matches.sort((a, b) =>
-            sortTitle === "az"
-              ? a.title.localeCompare(b.title)
-              : b.title.localeCompare(a.title)
-          );
-        } else if (sortPoet) {
-          matches.sort((a, b) =>
-            sortPoet === "az"
-              ? a.poet.localeCompare(b.poet)
-              : b.poet.localeCompare(a.title)
-          );
+        if (!query_text && !emotion) {
+            resultsDiv.innerHTML = "<p>Type a keyword or select an emotion to start searching.</p>";
+            return;
         }
 
-        // Display messages / results
-        if (!q && !emotion) {
-          resultsDiv.innerHTML = "<p>Type a keyword or select an emotion to start searching.</p>";
-          return;
+        resultsDiv.innerHTML = "<p class='loading-msg'>Searching the archive...</p>";
+
+        const params = new URLSearchParams();
+        params.append('q', query_text);
+        
+        if (emotion) {
+            // Capitalize the first letter for the backend genre filter (e.g., 'sadness' -> 'Sadness')
+            params.append('genre', emotion.charAt(0).toUpperCase() + emotion.slice(1)); 
+        }
+        
+        const fullUrl = `${API_ENDPOINT}?${params.toString()}`;
+
+        try {
+            const response = await fetch(fullUrl);
+            const data = await response.json();
+
+            if (data.error) {
+                resultsDiv.innerHTML = `<p class='loading-msg' style='color: red;'>API Error: ${data.error}</p>`;
+                return;
+            }
+            
+            renderResults(data.results, data.total_hits);
+
+        } catch (error) {
+            console.error("Fetch Error:", error);
+            resultsDiv.innerHTML = `<p class='loading-msg' style='color: red;'>
+                                      Connection Error: Could not connect to the API server (${API_ENDPOINT}). 
+                                      Check if the Flask server is running and CORS is enabled.
+                                    </p>`;
+        }
+    }
+
+    function renderResults(results, totalHits) {
+        const resultsDiv = document.getElementById("results");
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = "<p>No matching poems found in the Elasticsearch index.</p>";
+            return;
         }
 
-        if (matches.length === 0) {
-          resultsDiv.innerHTML = "<p>No matching poems (demo data).</p>";
-          return;
-        }
+        let html = `<p>Found ${totalHits} results (showing top ${results.length}):</p>`;
 
-        resultsDiv.innerHTML = matches.map(p => `
-          <div class="card">
+        // The card is now clickable and calls viewPoem with the document ID
+        html += results.map(p => `
+          <div class="card" onclick="viewPoem('${p.id}')" style="cursor: pointer;">
             <h3>${p.title}</h3>
-            <small>${p.poet} — Emotion: ${p.emotion}</small>
+            <small>${p.author} — Relevance Score: ${p.score.toFixed(2)}</small>
             <p>${p.snippet}</p>
           </div>
         `).join("");
-        // --- End of original logic ---
 
-      }, 500); // 500ms = 0.5 second delay
+        resultsDiv.innerHTML = html;
     }
 
-    // Call updateTheme() on page load
-    updateTheme();
 
+    function viewPoem(poemId) {
+        // Change the URL hash to trigger the loadFullPoem view
+        window.location.hash = `view:${poemId}`;
+    }
+
+    async function loadFullPoem(poemId) {
+        const mainDiv = document.querySelector('main');
+        mainDiv.innerHTML = "<p class='loading-msg'>Loading full poem...</p>";
+
+        // Construct the URL for the single poem API: http://localhost:5000/api/poem/ID
+        const fullUrl = `${API_ENDPOINT.replace('/search', '/poem')}/${poemId}`;
+        
+        try {
+            const response = await fetch(fullUrl);
+            const poem = await response.json();
+
+            if (poem.error) {
+                mainDiv.innerHTML = `<p class='loading-msg' style='color: red;'>${poem.error}</p>`;
+                return;
+            }
+
+            mainDiv.innerHTML = `
+                <button onclick="window.location.hash = ''" style="margin-bottom: 20px; padding: 10px 15px; background: #304ffe; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                    ← Back to Search Results
+                </button>
+                <div class="card">
+                    <h3>${poem.title}</h3>
+                    <small>By: ${poem.author} | Genre: ${poem.genre}</small>
+                    <hr style="border: 0; border-top: 1px solid #eee; margin: 15px 0;">
+                    <p style="white-space: pre-wrap; line-height: 1.8em;">${poem.text}</p>
+                </div>
+            `;
+
+            updateThemeFromGenre(poem.genre);
+
+        } catch (error) {
+            mainDiv.innerHTML = `<p class='loading-msg' style='color: red;'>Network Error loading poem.</p>`;
+        }
+    }
+
+
+    function loadView() {
+        const hash = window.location.hash.substring(1);
+        const [viewType, poemId] = hash.split(':');
+        const mainDiv = document.querySelector('main');
+
+        if (viewType === 'view' && poemId) {
+            loadFullPoem(poemId);
+        } else {
+            // Load the search view (re-renders search controls)
+            mainDiv.innerHTML = `
+                <div class="search-box">
+                    <input id="query" placeholder="Search poems, lines, or poet name...">
+                    <button onclick="doSearch()">Search</button>
+                </div>
+                <div class="filters">
+                    <select id="emotion">
+                        <option value="">Emotion</option>
+                        <option value="sadness">Sadness</option>
+                        <option value="surprise">Surprise</option>
+                        <option value="fear">Fear</option>
+                        <option value="joy">Joy</option>
+                        <option value="anger">Anger</option>
+                    </select>
+                </div>
+                <div id="results"></div>
+            `;
+            // Initialize the theme and run the search
+            updateTheme();
+            doSearch();
+        }
+    }
+
+    // --- INITIALIZATION ---
+    window.addEventListener('hashchange', loadView);
+    document.addEventListener('DOMContentLoaded', loadView);
   </script>
 </body>
 </html>
