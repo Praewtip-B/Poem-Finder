@@ -24,4 +24,11 @@ This repository contains most of the necessary files to run the "Poem-Finder" se
 2. In the `elasticsearch-X.X.X\bin\` folder, open the file `elasticsearch.bat` and run the program.
 3. Then, in the `Poem-Finder\backend\` folder, open one terminal to run `api_server.py`.
 4. After that, open another separate terminal and run `poem_indexer.py`.
+</br></br>*You will know that you have done all the steps correctly if the terminal running `poem_indexer.py` prints out:*
+```
+Bulk indexing complete. Successfully indexed 10000 documents.
+
+Indexing process finished. You can now run poem_searcher.py.
+```
 5. Finally, in the `Poem-Finder\frontend\` folder, open `index.html` to launch the search engine.
+</br></br>![demo 5](/instruction_img/5.jpg)
