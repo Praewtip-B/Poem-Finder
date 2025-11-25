@@ -4,20 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Poem Finder</title>
+
+  <!-- Script font for the word "Poem" -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
   <style>
     /* ----------------------------------------------------------------------- */
-    /* --- CSS STYLES (NO CHANGES HERE) --- */
+    /* --- CSS STYLES --- */
     /* ----------------------------------------------------------------------- */
     body {
       font-family: "Segoe UI", Arial, sans-serif;
-      background: #fafafa;
+      background: #ede5d9; /* warm paper-ish background */
       margin: 0;
       padding: 0;
       color: #222;
       transition: background-color 0.5s ease;
     }
+
     header {
-      background: #304ffe;
+      background: #704B0F;
       color: white;
       text-align: center;
       padding: 20px 0;
@@ -26,16 +31,26 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.2);
       transition: background 0.5s ease;
     }
+
+    /* "Poem" in script font, "Finder" normal */
+    .header-script {
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.6em;
+      margin-right: 6px;
+    }
+
     main {
       max-width: 800px;
       margin: 30px auto;
       padding: 0 20px;
     }
+
     .search-box {
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
     }
+
     .search-box input {
       flex: 1;
       padding: 12px;
@@ -44,9 +59,11 @@
       border-radius: 6px;
       outline: none;
       box-sizing: border-box;
+      background: #F2F1E8; /* soft input background */
     }
+
     .search-box button {
-      background: #304ffe;
+      background: #704B0F;
       color: white;
       border: none;
       padding: 12px 20px;
@@ -56,15 +73,18 @@
       transition: background 0.3s;
       white-space: nowrap;
     }
+
     .search-box button:hover {
-      background: #1a237e;
+      background: #4f340a; /* darker brown for hover */
     }
+
     .filters {
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
       flex-wrap: wrap;
     }
+
     select {
       padding: 10px;
       border-radius: 6px;
@@ -73,10 +93,13 @@
       flex: 1;
       min-width: 140px;
       box-sizing: border-box;
+      background: #F2F1E8;
     }
+
     #results p {
       margin-top: 0;
     }
+
     .card {
       background: white;
       padding: 16px 20px;
@@ -84,13 +107,16 @@
       border-radius: 8px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
+
     .card h3 {
       margin: 0 0 4px;
-      color: #304ffe;
+      color: #704B0F;
     }
+
     .card small {
       color: #777;
     }
+
     .card p {
       margin-top: 10px;
       line-height: 1.5em;
@@ -103,7 +129,6 @@
       font-style: italic;
       padding: 20px 0;
     }
-
 
     /* --- Dynamic Theme Styles --- */
     
@@ -151,7 +176,9 @@
 </head>
 
 <body>
-  <header>Poem Finder</header>
+  <header>
+    <span class="header-script">Poem</span> Finder
+  </header>
 
   <main></main>
 
@@ -161,14 +188,12 @@
     
     // --- Theme Changer ---
     function updateTheme() {
-        // Get the select element that was just re-rendered inside loadView()
         const emotionSelect = document.getElementById("emotion");
         if (!emotionSelect) return; 
         
         const emotion = emotionSelect.value;
         const body = document.body;
 
-        // Attach event listener to the newly created element
         emotionSelect.onchange = updateTheme;
 
         body.classList.remove("theme-sadness", "theme-surprise", "theme-fear", "theme-joy", "theme-anger");
@@ -192,7 +217,7 @@
     async function doSearch() {
         const query_text = document.getElementById("query").value.trim();
         const emotion = document.getElementById("emotion").value; 
-        const resultsDiv = document.getElementById("results");
+               const resultsDiv = document.getElementById("results");
 
         if (!query_text && !emotion) {
             resultsDiv.innerHTML = "<p>Type a keyword or select an emotion to start searching.</p>";
@@ -205,7 +230,6 @@
         params.append('q', query_text);
         
         if (emotion) {
-            // Capitalize the first letter for the backend genre filter (e.g., 'sadness' -> 'Sadness')
             params.append('genre', emotion.charAt(0).toUpperCase() + emotion.slice(1)); 
         }
         
@@ -241,7 +265,6 @@
 
         let html = `<p>Found ${totalHits} results (showing top ${results.length}):</p>`;
 
-        // The card is now clickable and calls viewPoem with the document ID
         html += results.map(p => `
           <div class="card" onclick="viewPoem('${p.id}')" style="cursor: pointer;">
             <h3>${p.title}</h3>
@@ -253,9 +276,7 @@
         resultsDiv.innerHTML = html;
     }
 
-
     function viewPoem(poemId) {
-        // Change the URL hash to trigger the loadFullPoem view
         window.location.hash = `view:${poemId}`;
     }
 
@@ -263,7 +284,6 @@
         const mainDiv = document.querySelector('main');
         mainDiv.innerHTML = "<p class='loading-msg'>Loading full poem...</p>";
 
-        // Construct the URL for the single poem API: http://localhost:5000/api/poem/ID
         const fullUrl = `${API_ENDPOINT.replace('/search', '/poem')}/${poemId}`;
         
         try {
@@ -276,7 +296,7 @@
             }
 
             mainDiv.innerHTML = `
-                <button onclick="window.location.hash = ''" style="margin-bottom: 20px; padding: 10px 15px; background: #304ffe; color: white; border: none; border-radius: 6px; cursor: pointer;">
+                <button onclick="window.location.hash = ''" style="margin-bottom: 20px; padding: 10px 15px; background: #704B0F; color: white; border: none; border-radius: 6px; cursor: pointer;">
                     ← Back to Search Results
                 </button>
                 <div class="card">
@@ -294,7 +314,6 @@
         }
     }
 
-
     function loadView() {
         const hash = window.location.hash.substring(1);
         const [viewType, poemId] = hash.split(':');
@@ -303,7 +322,6 @@
         if (viewType === 'view' && poemId) {
             loadFullPoem(poemId);
         } else {
-            // Load the search view (re-renders search controls)
             mainDiv.innerHTML = `
                 <div class="search-box">
                     <input id="query" placeholder="Search poems, lines, or poet name...">
@@ -321,13 +339,11 @@
                 </div>
                 <div id="results"></div>
             `;
-            // Initialize the theme and run the search
             updateTheme();
             doSearch();
         }
     }
 
-    // --- INITIALIZATION ---
     window.addEventListener('hashchange', loadView);
     document.addEventListener('DOMContentLoaded', loadView);
   </script>
