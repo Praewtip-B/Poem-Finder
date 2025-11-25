@@ -20,4 +20,6 @@ This repository contains most of the necessary files to run the "Poem-Finder" se
 
 ## Running the Search Engine
 
-1. 
+1. Ensure that the virtual environment used for running python programs has the modules `elasticsearch`, `flask`, and `flask-cors` installed.
+2. In the `elasticsearch-X.X.X` folder path `\bin\`. Click open the file `elasticsearch.bat` and run the program.
+3. Then, in the `backend` folder, run `api_server.py`
