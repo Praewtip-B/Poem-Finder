@@ -7,9 +7,10 @@ This repository contains most of the necessary files to run the "Poem-Finder" se
 ## Installing and Preconfiguring Elasticsearch
 
 1. Download Elasticsearch [here](https://www.elastic.co/downloads/elasticsearch). It should bring you to this page: </br></br>
-![demo 1](/instruction_img/1.jpg)</br>
+![demo 1](/instruction_img/1.jpg)</br></br>
 2. Select "Choose platform" dropdown to choose your compatible operating system.
 3. Click the blue button to download Elasticsearch
-4. After it finished downloading, extract the folder. Then in the folder path `\bin\`. Click open the file `elasticsearch.bat` and run the program, and a command prompt should pop up. 
-5. Wait for about 3 minutes until the commands stop running, then close the program.
-6. Next, in the folder path `\config\`. Click open the file `elasticsearch.yml` in a text/code editor.
+4. After it finished downloading, extract the folder. Then in the folder path `\bin\`. Click open the file `elasticsearch.bat` and run the program.
+</br></br>![demo 2](/instruction_img/2.jpg)</br></br>
+6. A command prompt should pop up after this. Wait for about 3 minutes until the commands stop running, then close the program.
+7. Next, in the folder path `\config\`. Click open the file `elasticsearch.yml` in a text/code editor.
