@@ -12,5 +12,12 @@ This repository contains most of the necessary files to run the "Poem-Finder" se
 3. Click the blue button to download Elasticsearch
 4. After it finished downloading, extract the folder. Then in the folder path `\bin\`. Click open the file `elasticsearch.bat` and run the program.
 </br></br>![demo 2](/instruction_img/2.jpg)</br></br>
-6. A command prompt should pop up after this. Wait for about 3 minutes until the commands stop running, then close the program.
-7. Next, in the folder path `\config\`. Click open the file `elasticsearch.yml` in a text/code editor.
+6. A command prompt should pop up after this. Wait for around 3 minutes until the commands appear to stop running, then close the program.
+7. Next, in the folder path `\config\`. Click open the file `elasticsearch.yml` in any text/code editor.
+</br></br>![demo 3](/instruction_img/3.jpg)</br></br>
+8. On lines 92 and 94 replace the values of `true` to `false` then save and close the editor.
+</br></br>![demo 4](/instruction_img/4.jpg)</br></br>
+
+## Running the Search Engine
+
+1. 
