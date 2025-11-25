@@ -9,4 +9,5 @@ This repository contains most of the necessary files to run the "Poem-Finder" se
 1. Download Elasticsearch [here](https://www.elastic.co/downloads/elasticsearch). It should bring you to this page: </br></br>
 ![demo 1](/instruction_img/1.jpg)</br>
 2. Select "Choose platform" dropdown to choose your compatible operating system.
-3. Click the blue download button to download
+3. Click the blue button to download Elasticsearch
+4. After it finished downloading, extract the folder. Then, in the folder path `\config\`. Click open the file `elasticsearch.yml` in a text/code editor.
