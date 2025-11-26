@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,7 +15,8 @@
     /* ----------------------------------------------------------------------- */
     body {
       font-family: "Segoe UI", Arial, sans-serif;
-      background: #ede5d9; /* warm paper-ish background */
+      background: #ede5d9;
+      /* warm paper-ish background */
       margin: 0;
       padding: 0;
       color: #222;
@@ -28,7 +30,7 @@
       padding: 20px 0;
       font-size: 24px;
       letter-spacing: 1px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
       transition: background 0.5s ease;
     }
 
@@ -37,6 +39,19 @@
       font-family: 'Great Vibes', cursive;
       font-size: 1.6em;
       margin-right: 6px;
+    }
+
+    /* Subtitle under header */
+    .subtitle {
+      text-align: center;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: #704B0F;
+      margin-top: 8px;
+      margin-bottom: 18px;
+      font-size: 16px;
+      letter-spacing: 0.6px;
+      font-style: italic;
+      opacity: 0.9;
     }
 
     main {
@@ -59,7 +74,8 @@
       border-radius: 6px;
       outline: none;
       box-sizing: border-box;
-      background: #F2F1E8; /* soft input background */
+      background: #F2F1E8;
+      /* soft input background */
     }
 
     .search-box button {
@@ -75,7 +91,8 @@
     }
 
     .search-box button:hover {
-      background: #4f340a; /* darker brown for hover */
+      background: #4f340a;
+      /* darker brown for hover */
     }
 
     .filters {
@@ -100,12 +117,39 @@
       margin-top: 0;
     }
 
+    button:hover {
+      opacity: 0.9;
+    }
+
+
+    /* ----------------------------------------------------------------------- */
+    /* --- RESULT CARDS --- */
+    /* ----------------------------------------------------------------------- */
     .card {
       background: white;
-      padding: 16px 20px;
+      padding: 16px 20px 16px 26px;
       margin-bottom: 16px;
       border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      position: relative;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Bookmark stripe */
+    .card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #c08b3f;
+      border-radius: 8px 0 0 8px;
     }
 
     .card h3 {
@@ -131,47 +175,111 @@
     }
 
     /* --- Dynamic Theme Styles --- */
-    
+
     /* ANGER */
     body.theme-anger header {
       background: linear-gradient(to right, #d32f2f, #b71c1c);
     }
-    body.theme-anger .search-box button { background: #d32f2f; }
-    body.theme-anger .search-box button:hover { background: #b71c1c; }
-    body.theme-anger .card h3 { color: #d32f2f; }
+
+    body.theme-anger .search-box button {
+      background: #d32f2f;
+    }
+
+    body.theme-anger .search-box button:hover {
+      background: #b71c1c;
+    }
+
+    body.theme-anger .card h3 {
+      color: #d32f2f;
+    }
+
+    body.theme-anger .card::before {
+      background: #d32f2f;
+    }
 
     /* JOY */
     body.theme-joy header {
       background: linear-gradient(to right, #fbc02d, #f57f17);
     }
-    body.theme-joy .search-box button { background: #fbc02d; }
-    body.theme-joy .search-box button:hover { background: #f57f17; }
-    body.theme-joy .card h3 { color: #f57f17; }
+
+    body.theme-joy .search-box button {
+      background: #fbc02d;
+    }
+
+    body.theme-joy .search-box button:hover {
+      background: #f57f17;
+    }
+
+    body.theme-joy .card h3 {
+      color: #f57f17;
+    }
+
+    body.theme-joy .card::before {
+      background: #f57f17;
+    }
 
     /* SADNESS */
     body.theme-sadness header {
       background: linear-gradient(to right, #78909c, #455a64);
     }
-    body.theme-sadness .search-box button { background: #78909c; }
-    body.theme-sadness .search-box button:hover { background: #455a64; }
-    body.theme-sadness .card h3 { color: #455a64; }
+
+    body.theme-sadness .search-box button {
+      background: #78909c;
+    }
+
+    body.theme-sadness .search-box button:hover {
+      background: #455a64;
+    }
+
+    body.theme-sadness .card h3 {
+      color: #455a64;
+    }
+
+    body.theme-sadness .card::before {
+      background: #455a64;
+    }
 
     /* FEAR */
     body.theme-fear header {
       background: linear-gradient(to right, #4a148c, #311b92);
     }
-    body.theme-fear .search-box button { background: #4a148c; }
-    body.theme-fear .search-box button:hover { background: #311b92; }
-    body.theme-fear .card h3 { color: #4a148c; }
+
+    body.theme-fear .search-box button {
+      background: #4a148c;
+    }
+
+    body.theme-fear .search-box button:hover {
+      background: #311b92;
+    }
+
+    body.theme-fear .card h3 {
+      color: #4a148c;
+    }
+
+    body.theme-fear .card::before {
+      background: #4a148c;
+    }
 
     /* SURPRISE */
     body.theme-surprise header {
       background: linear-gradient(to right, #00bfa5, #00897b);
     }
-    body.theme-surprise .search-box button { background: #00bfa5; }
-    body.theme-surprise .search-box button:hover { background: #00897b; }
-    body.theme-surprise .card h3 { color: #00897b; }
 
+    body.theme-surprise .search-box button {
+      background: #00bfa5;
+    }
+
+    body.theme-surprise .search-box button:hover {
+      background: #00897b;
+    }
+
+    body.theme-surprise .card h3 {
+      color: #00897b;
+    }
+
+    body.theme-surprise .card::before {
+      background: #00897b;
+    }
   </style>
 </head>
 
@@ -180,92 +288,95 @@
     <span class="header-script">Poem</span> Finder
   </header>
 
+  <!-- Subtitle -->
+  <p class="subtitle">An English Poem Search Engine</p>
+
   <main></main>
 
   <script>
     // --- API Configuration ---
     const API_ENDPOINT = "http://localhost:5000/api/search";
-    
+
     // --- Theme Changer ---
     function updateTheme() {
-        const emotionSelect = document.getElementById("emotion");
-        if (!emotionSelect) return; 
-        
-        const emotion = emotionSelect.value;
-        const body = document.body;
+      const emotionSelect = document.getElementById("emotion");
+      if (!emotionSelect) return;
 
-        emotionSelect.onchange = updateTheme;
+      const emotion = emotionSelect.value;
+      const body = document.body;
 
-        body.classList.remove("theme-sadness", "theme-surprise", "theme-fear", "theme-joy", "theme-anger");
-        if (emotion) {
-            body.classList.add("theme-" + emotion);
-        }
+      emotionSelect.onchange = updateTheme;
+
+      body.classList.remove("theme-sadness", "theme-surprise", "theme-fear", "theme-joy", "theme-anger");
+      if (emotion) {
+        body.classList.add("theme-" + emotion);
+      }
     }
-    
+
     function updateThemeFromGenre(genre) {
-        const body = document.body;
-        body.className = '';
-        const lowerCaseGenre = genre ? genre.toLowerCase() : '';
-        const themeClass = `theme-${lowerCaseGenre}`;
-        
-        if (['theme-sadness', 'theme-surprise', 'theme-fear', 'theme-joy', 'theme-anger'].includes(themeClass)) {
-            body.classList.add(themeClass);
-        }
+      const body = document.body;
+      body.className = '';
+      const lowerCaseGenre = genre ? genre.toLowerCase() : '';
+      const themeClass = `theme-${lowerCaseGenre}`;
+
+      if (['theme-sadness', 'theme-surprise', 'theme-fear', 'theme-joy', 'theme-anger'].includes(themeClass)) {
+        body.classList.add(themeClass);
+      }
     }
 
     // --- SEARCH AND VIEW LOGIC ---
     async function doSearch() {
-        const query_text = document.getElementById("query").value.trim();
-        const emotion = document.getElementById("emotion").value; 
-               const resultsDiv = document.getElementById("results");
+      const query_text = document.getElementById("query").value.trim();
+      const emotion = document.getElementById("emotion").value;
+      const resultsDiv = document.getElementById("results");
 
-        if (!query_text && !emotion) {
-            resultsDiv.innerHTML = "<p>Type a keyword or select an emotion to start searching.</p>";
-            return;
+      if (!query_text && !emotion) {
+        resultsDiv.innerHTML = "<p>Type a keyword or select an emotion to start searching.</p>";
+        return;
+      }
+
+      resultsDiv.innerHTML = "<p class='loading-msg'>Searching the archive...</p>";
+
+      const params = new URLSearchParams();
+      params.append('q', query_text);
+
+      if (emotion) {
+        params.append('genre', emotion.charAt(0).toUpperCase() + emotion.slice(1));
+      }
+
+      const fullUrl = `${API_ENDPOINT}?${params.toString()}`;
+
+      try {
+        const response = await fetch(fullUrl);
+        const data = await response.json();
+
+        if (data.error) {
+          resultsDiv.innerHTML = `<p class='loading-msg' style='color: red;'>API Error: ${data.error}</p>`;
+          return;
         }
 
-        resultsDiv.innerHTML = "<p class='loading-msg'>Searching the archive...</p>";
+        renderResults(data.results, data.total_hits);
 
-        const params = new URLSearchParams();
-        params.append('q', query_text);
-        
-        if (emotion) {
-            params.append('genre', emotion.charAt(0).toUpperCase() + emotion.slice(1)); 
-        }
-        
-        const fullUrl = `${API_ENDPOINT}?${params.toString()}`;
-
-        try {
-            const response = await fetch(fullUrl);
-            const data = await response.json();
-
-            if (data.error) {
-                resultsDiv.innerHTML = `<p class='loading-msg' style='color: red;'>API Error: ${data.error}</p>`;
-                return;
-            }
-            
-            renderResults(data.results, data.total_hits);
-
-        } catch (error) {
-            console.error("Fetch Error:", error);
-            resultsDiv.innerHTML = `<p class='loading-msg' style='color: red;'>
+      } catch (error) {
+        console.error("Fetch Error:", error);
+        resultsDiv.innerHTML = `<p class='loading-msg' style='color: red;'>
                                       Connection Error: Could not connect to the API server (${API_ENDPOINT}). 
                                       Check if the Flask server is running and CORS is enabled.
                                     </p>`;
-        }
+      }
     }
 
     function renderResults(results, totalHits) {
-        const resultsDiv = document.getElementById("results");
+      const resultsDiv = document.getElementById("results");
 
-        if (results.length === 0) {
-            resultsDiv.innerHTML = "<p>No matching poems found in the Elasticsearch index.</p>";
-            return;
-        }
+      if (results.length === 0) {
+        resultsDiv.innerHTML = "<p>No matching poems found in the Elasticsearch index.</p>";
+        return;
+      }
 
-        let html = `<p>Found ${totalHits} results (showing top ${results.length}):</p>`;
+      let html = `<p>Found ${totalHits} results (showing top ${results.length}):</p>`;
 
-        html += results.map(p => `
+      html += results.map(p => `
           <div class="card" onclick="viewPoem('${p.id}')" style="cursor: pointer;">
             <h3>${p.title}</h3>
             <small>${p.author} — Relevance Score: ${p.score.toFixed(2)}</small>
@@ -273,29 +384,29 @@
           </div>
         `).join("");
 
-        resultsDiv.innerHTML = html;
+      resultsDiv.innerHTML = html;
     }
 
     function viewPoem(poemId) {
-        window.location.hash = `view:${poemId}`;
+      window.location.hash = `view:${poemId}`;
     }
 
     async function loadFullPoem(poemId) {
-        const mainDiv = document.querySelector('main');
-        mainDiv.innerHTML = "<p class='loading-msg'>Loading full poem...</p>";
+      const mainDiv = document.querySelector('main');
+      mainDiv.innerHTML = "<p class='loading-msg'>Loading full poem...</p>";
 
-        const fullUrl = `${API_ENDPOINT.replace('/search', '/poem')}/${poemId}`;
-        
-        try {
-            const response = await fetch(fullUrl);
-            const poem = await response.json();
+      const fullUrl = `${API_ENDPOINT.replace('/search', '/poem')}/${poemId}`;
 
-            if (poem.error) {
-                mainDiv.innerHTML = `<p class='loading-msg' style='color: red;'>${poem.error}</p>`;
-                return;
-            }
+      try {
+        const response = await fetch(fullUrl);
+        const poem = await response.json();
 
-            mainDiv.innerHTML = `
+        if (poem.error) {
+          mainDiv.innerHTML = `<p class='loading-msg' style='color: red;'>${poem.error}</p>`;
+          return;
+        }
+
+        mainDiv.innerHTML = `
                 <button onclick="window.location.hash = ''" style="margin-bottom: 20px; padding: 10px 15px; background: #704B0F; color: white; border: none; border-radius: 6px; cursor: pointer;">
                     ← Back to Search Results
                 </button>
@@ -307,22 +418,22 @@
                 </div>
             `;
 
-            updateThemeFromGenre(poem.genre);
+        updateThemeFromGenre(poem.genre);
 
-        } catch (error) {
-            mainDiv.innerHTML = `<p class='loading-msg' style='color: red;'>Network Error loading poem.</p>`;
-        }
+      } catch (error) {
+        mainDiv.innerHTML = `<p class='loading-msg' style='color: red;'>Network Error loading poem.</p>`;
+      }
     }
 
     function loadView() {
-        const hash = window.location.hash.substring(1);
-        const [viewType, poemId] = hash.split(':');
-        const mainDiv = document.querySelector('main');
+      const hash = window.location.hash.substring(1);
+      const [viewType, poemId] = hash.split(':');
+      const mainDiv = document.querySelector('main');
 
-        if (viewType === 'view' && poemId) {
-            loadFullPoem(poemId);
-        } else {
-            mainDiv.innerHTML = `
+      if (viewType === 'view' && poemId) {
+        loadFullPoem(poemId);
+      } else {
+        mainDiv.innerHTML = `
                 <div class="search-box">
                     <input id="query" placeholder="Search poems, lines, or poet name...">
                     <button onclick="doSearch()">Search</button>
@@ -339,13 +450,14 @@
                 </div>
                 <div id="results"></div>
             `;
-            updateTheme();
-            doSearch();
-        }
+        updateTheme();
+        doSearch();
+      }
     }
 
     window.addEventListener('hashchange', loadView);
     document.addEventListener('DOMContentLoaded', loadView);
   </script>
 </body>
+
 </html>
